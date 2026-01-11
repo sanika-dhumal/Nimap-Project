@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Category Master</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <style>
+    body { background-color: #f8f9fa; }
+    .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .table-hover tbody tr:hover { background-color: #e9ecef; }
+  </style>
+</head>
+<body class="container mt-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary">📂 Category Master</h2>
+    <div>
+      <!-- Button to go to Home Page -->
+      <a href="/" class="btn btn-info me-2">🏠 Home</a>
+      <!-- Button to go to Product Page -->
+      <a href="/products" class="btn btn-secondary">Go to Product Master</a>
+    </div>
+  </div>
+
+  <!-- Add/Edit Card -->
+  <div class="card p-4 mb-4 bg-white">
+    <h5 class="card-title text-success mb-3">
+      <%= categoryToEdit ? 'Edit Category' : 'Add New Category' %>
+    </h5>
+    <form action="<%= categoryToEdit ? '/categories/update/' + categoryToEdit.CategoryId : '/categories/add' %>" method="post" class="d-flex gap-2 flex-wrap">
+      <input type="text" name="CategoryName" class="form-control" placeholder="Category Name" required
+             value="<%= categoryToEdit ? categoryToEdit.CategoryName : '' %>">
+      <button type="submit" class="btn btn-primary">
+        <%= categoryToEdit ? 'Update' : 'Add' %>
+      </button>
+      <% if(categoryToEdit){ %>
+        <a href="/categories" class="btn btn-secondary">Cancel</a>
+      <% } %>
+    </form>
+  </div>
+
+  <!-- Category Table -->
+  <div class="card p-3 bg-white">
+    <h5 class="card-title text-info mb-3">Category List</h5>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Category ID</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% categories.forEach(c => { %>
+            <tr>
+              <td><%= c.CategoryId %></td>
+              <td><%= c.CategoryName %></td>
+              <td>
+                <a href="/categories/edit/<%= c.CategoryId %>" class="btn btn-warning btn-sm me-1">Edit</a>
+                <form action="/categories/delete/<%= c.CategoryId %>" method="post" style="display:inline;">
+                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>
